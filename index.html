@@ -2,36 +2,117 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>YouTube埋め込みテスト</title>
+  <title>YouTube埋め込みプロジェクト</title>
   <style>
-    /* ページ中央に動画を配置し、レスポンシブ対応 */
     body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
+      font-family: sans-serif;
       background-color: #f9f9f9;
+      margin: 0;
+      padding: 2rem;
     }
-    .video-container {
-      width: 100%;
-      max-width: 560px;
-      aspect-ratio: 16 / 9; /* 常に16:9の比率を維持 */
+    button {
+      margin: 0.5rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
     }
-    .video-container iframe {
+    /* ポップアップの基本スタイル */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border: 1px solid #ccc;
+      padding: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+    .popup button {
+      display: block;
       width: 100%;
-      height: 100%;
-      border: 0;
+      margin: 0.5rem 0;
+    }
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
     }
   </style>
 </head>
 <body>
-  <div class="video-container">
-    <iframe src="https://www.youtube.com/embed/gTz29bk_HG0?autoplay=0&fs=1&rel=0"
-      title="YouTube video player"
+  <!-- YouTube選択ボタン -->
+  <button id="youtubeBtn">YouTubeを選択</button>
+
+  <!-- ポップアップ -->
+  <div class="overlay" id="overlay"></div>
+  <div class="popup" id="popup">
+    <h3>YouTube操作</h3>
+    <button id="autoplayBtn">Autoplay</button>
+    <button id="reloadBtn">Reload</button>
+    <button id="clearBtn">Clear</button>
+    <button id="editUrlBtn">URL編集</button>
+    <button id="closeBtn">閉じる</button>
+  </div>
+
+  <!-- YouTube埋め込み -->
+  <div id="videoContainer" style="margin-top:2rem; max-width:560px; aspect-ratio:16/9;">
+    <iframe id="youtubeFrame"
+      src="https://www.youtube.com/embed/gTz29bk_HG0?fs=1"
+      width="560" height="315"
+      frameborder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       allowfullscreen>
     </iframe>
   </div>
+
+  <script>
+    const youtubeBtn = document.getElementById('youtubeBtn');
+    const popup = document.getElementById('popup');
+    const overlay = document.getElementById('overlay');
+    const closeBtn = document.getElementById('closeBtn');
+    const autoplayBtn = document.getElementById('autoplayBtn');
+    const reloadBtn = document.getElementById('reloadBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const editUrlBtn = document.getElementById('editUrlBtn');
+    const youtubeFrame = document.getElementById('youtubeFrame');
+
+    // ポップアップ表示
+    youtubeBtn.addEventListener('click', () => {
+      popup.style.display = 'block';
+      overlay.style.display = 'block';
+    });
+
+    // 閉じる
+    closeBtn.addEventListener('click', () => {
+      popup.style.display = 'none';
+      overlay.style.display = 'none';
+    });
+
+    // Autoplay
+    autoplayBtn.addEventListener('click', () => {
+      const baseUrl = "https://www.youtube.com/embed/gTz29bk_HG0";
+      youtubeFrame.src = baseUrl + "?autoplay=1&fs=1";
+    });
+
+    // Reload
+    reloadBtn.addEventListener('click', () => {
+      youtubeFrame.src = youtubeFrame.src; // 再読み込み
+    });
+
+    // Clear
+    clearBtn.addEventListener('click', () => {
+      youtubeFrame.src = "";
+    });
+
+    // URL編集 → YouTube本体へ飛ぶ
+    editUrlBtn.addEventListener('click', () => {
+      window.open("https://www.youtube.com/watch?v=gTz29bk_HG0", "_blank");
+    });
+  </script>
 </body>
 </html>
