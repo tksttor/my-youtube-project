@@ -16,7 +16,7 @@
     .video-container {
       width: 100%;
       max-width: 560px;
-      aspect-ratio: 16 / 9; /* 常に16:9 */
+      aspect-ratio: 16 / 9;
       margin-top: 0.5rem;
     }
     .video-container iframe {
@@ -70,7 +70,6 @@
     form.addEventListener("submit", function(event) {
       event.preventDefault();
       let url = input.value.trim();
-
       if (!url) return;
 
       // YouTube URLをembed形式に変換
