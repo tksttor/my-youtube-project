@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>YouTube埋め込みテスト</title>
+  <style>
+    /* ページ中央に動画を配置し、レスポンシブ対応 */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f9f9f9;
+    }
+    .video-container {
+      position: relative;
+      width: 100%;
+      max-width: 560px;
+      padding-bottom: 56.25%; /* 16:9 アスペクト比 */
+      height: 0;
+    }
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="video-container">
+    <iframe
+      src="https://www.youtube-nocookie.com/embed/gTz29bk_HG0?si=jcZ1otv5kL-CCZ7_"
+      title="YouTube video player"
+      loading="lazy"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="origin"
+      allowfullscreen>
+    </iframe>
+  </div>
+</body>
+</html>
