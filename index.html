@@ -2,116 +2,87 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>YouTube埋め込みプロジェクト</title>
+  <title>YouTube埋め込みテスト</title>
   <style>
     body {
       font-family: sans-serif;
       background-color: #f9f9f9;
       margin: 0;
       padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .video-container {
+      width: 100%;
+      max-width: 560px;
+      aspect-ratio: 16 / 9; /* 常に16:9 */
+      margin-top: 1rem;
+    }
+    .video-container iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    form {
+      margin-bottom: 1rem;
+    }
+    input[type="text"] {
+      width: 400px;
+      padding: 0.5rem;
+      font-size: 1rem;
     }
     button {
-      margin: 0.5rem;
       padding: 0.5rem 1rem;
       font-size: 1rem;
-      cursor: pointer;
-    }
-    /* ポップアップの基本スタイル */
-    .popup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      border: 1px solid #ccc;
-      padding: 1rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      z-index: 1000;
-    }
-    .popup button {
-      display: block;
-      width: 100%;
-      margin: 0.5rem 0;
-    }
-    .overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 999;
+      margin-left: 0.5rem;
     }
   </style>
 </head>
 <body>
-  <!-- YouTube選択ボタン -->
-  <button id="youtubeBtn">YouTubeを選択</button>
+  <h2>YouTube埋め込み切り替え</h2>
+  <!-- URL入力フォーム -->
+  <form id="urlForm">
+    <input type="text" id="videoUrl" placeholder="YouTubeのURLを入力してください">
+    <button type="submit">動画を変更</button>
+  </form>
 
-  <!-- ポップアップ -->
-  <div class="overlay" id="overlay"></div>
-  <div class="popup" id="popup">
-    <h3>YouTube操作</h3>
-    <button id="autoplayBtn">Autoplay</button>
-    <button id="reloadBtn">Reload</button>
-    <button id="clearBtn">Clear</button>
-    <button id="editUrlBtn">URL編集</button>
-    <button id="closeBtn">閉じる</button>
-  </div>
-
-  <!-- YouTube埋め込み -->
-  <div id="videoContainer" style="margin-top:2rem; max-width:560px; aspect-ratio:16/9;">
+  <!-- 埋め込み動画 -->
+  <div class="video-container">
     <iframe id="youtubeFrame"
-      src="https://www.youtube.com/embed/gTz29bk_HG0?fs=1"
-      width="560" height="315"
-      frameborder="0"
+      src="https://www.youtube.com/embed/gTz29bk_HG0?fs=1&rel=0"
+      title="YouTube video player"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       allowfullscreen>
     </iframe>
   </div>
 
   <script>
-    const youtubeBtn = document.getElementById('youtubeBtn');
-    const popup = document.getElementById('popup');
-    const overlay = document.getElementById('overlay');
-    const closeBtn = document.getElementById('closeBtn');
-    const autoplayBtn = document.getElementById('autoplayBtn');
-    const reloadBtn = document.getElementById('reloadBtn');
-    const clearBtn = document.getElementById('clearBtn');
-    const editUrlBtn = document.getElementById('editUrlBtn');
-    const youtubeFrame = document.getElementById('youtubeFrame');
+    const form = document.getElementById("urlForm");
+    const input = document.getElementById("videoUrl");
+    const frame = document.getElementById("youtubeFrame");
 
-    // ポップアップ表示
-    youtubeBtn.addEventListener('click', () => {
-      popup.style.display = 'block';
-      overlay.style.display = 'block';
-    });
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+      let url = input.value.trim();
 
-    // 閉じる
-    closeBtn.addEventListener('click', () => {
-      popup.style.display = 'none';
-      overlay.style.display = 'none';
-    });
+      if (!url) return;
 
-    // Autoplay
-    autoplayBtn.addEventListener('click', () => {
-      const baseUrl = "https://www.youtube.com/embed/gTz29bk_HG0";
-      youtubeFrame.src = baseUrl + "?autoplay=1&fs=1";
-    });
+      // watch?v=形式をembed形式に変換
+      let videoId = "";
+      if (url.includes("watch?v=")) {
+        videoId = url.split("watch?v=")[1].split("&")[0];
+      } else if (url.includes("youtu.be/")) {
+        videoId = url.split("youtu.be/")[1].split("?")[0];
+      } else if (url.includes("embed/")) {
+        videoId = url.split("embed/")[1].split("?")[0];
+      }
 
-    // Reload
-    reloadBtn.addEventListener('click', () => {
-      youtubeFrame.src = youtubeFrame.src; // 再読み込み
-    });
-
-    // Clear
-    clearBtn.addEventListener('click', () => {
-      youtubeFrame.src = "";
-    });
-
-    // URL編集 → YouTube本体へ飛ぶ
-    editUrlBtn.addEventListener('click', () => {
-      window.open("https://www.youtube.com/watch?v=gTz29bk_HG0", "_blank");
+      if (videoId) {
+        frame.src = "https://www.youtube.com/embed/" + videoId + "?fs=1&rel=0";
+      } else {
+        alert("有効なYouTube URLを入力してください");
+      }
     });
   </script>
 </body>
