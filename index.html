@@ -46,16 +46,16 @@
 <body>
   <h2>YouTube埋め込み切り替え</h2>
 
-  <!-- URL入力フォーム（動画のすぐ上に表示） -->
+  <!-- URL入力フォーム -->
   <form id="urlForm">
     <input type="text" id="videoUrl" placeholder="YouTubeのURLを入力してください">
     <button type="submit">動画を変更</button>
   </form>
 
-  <!-- 埋め込み動画 -->
+  <!-- 埋め込み動画（初期はブランク） -->
   <div class="video-container">
     <iframe id="youtubeFrame"
-      src="https://www.youtube.com/embed/gTz29bk_HG0?fs=1&rel=0"
+      src=""
       title="YouTube video player"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
       allowfullscreen>
@@ -84,7 +84,8 @@
       }
 
       if (videoId) {
-        frame.src = "https://www.youtube.com/embed/" + videoId + "?fs=1&rel=0";
+        // 自動再生付きで埋め込み
+        frame.src = "https://www.youtube.com/embed/" + videoId + "?fs=1&rel=0&autoplay=1";
       } else {
         alert("有効なYouTube URLを入力してください");
       }
